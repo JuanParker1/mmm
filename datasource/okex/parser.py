@@ -3,7 +3,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Dict, List
 
-from data import Ticker
+from events import TickerEvent
 
 
 class ParserFactory:
@@ -28,12 +28,12 @@ class Parser(ABC):
 
 class TickerParser(Parser):
 
-    def parse(self, data: Dict) -> List[Ticker]:
+    def parse(self, data: Dict) -> List[TickerEvent]:
         result = []
         data = data['data']
         for each in data:
-            ticker = Ticker(each['instId'], Decimal(each['px']), Decimal(each['sz']), each['side'],
-                            datetime.fromtimestamp(int(each['ts'])/1000))
+            ticker = TickerEvent(each['instId'], Decimal(each['px']), Decimal(each['sz']), each['side'],
+                                 datetime.fromtimestamp(int(each['ts'])/1000))
             result.append(ticker)
         return data
 
