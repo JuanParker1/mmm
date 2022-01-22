@@ -3,7 +3,7 @@ import logging
 import asyncio
 import websockets
 
-from datasource.okex.dispatcher import Dispatcher
+from events.dispatcher import Dispatcher
 from datasource.okex.parser import ParserFactory
 
 
@@ -29,13 +29,16 @@ class OkexWsDatasource:
         if not self.received_pong:
             raise CollectionError('未收到pong')
 
-    async def subscribe(self, topic: str):
-        while True:
-            try:
-                await self._do_subscribe(topic)
-            except Exception as e:
-                logging.exception(e)
-                logging.info('即将重新连接')
+    def subscribe(self, topic: str):
+        async def create_task():
+            while True:
+                try:
+                    await self._do_subscribe(topic)
+                except Exception as e:
+                    logging.exception(e)
+                    logging.info('即将重新连接')
+        loop = asyncio.get_event_loop()
+        loop.create_task(create_task(), name=f'okex-ws-sub-{topic}')
 
     async def _do_subscribe(self, topic: str):
         async with websockets.connect(self.__uri__) as ws:
