@@ -5,12 +5,6 @@ from decimal import Decimal
 from enum import Enum
 
 
-class EventType(Enum):
-    TICKER = 1
-    ORDERBOOK = 2
-    BAR = 3
-
-
 class Event(ABC):
 
     @abstractmethod
