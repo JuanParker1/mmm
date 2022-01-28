@@ -3,8 +3,8 @@ import logging
 import asyncio
 import websockets
 
-from events.dispatcher import Dispatcher
-from datasource.okex.parser import ParserFactory
+from .parser import ParserFactory, parser_factory
+from events import default_dispatcher, Event
 
 
 class CollectionError(Exception):
@@ -15,10 +15,9 @@ class OkexWsDatasource:
     __uri__ = "wss://wsaws.okex.com:8443/ws/v5/public"  # noqa
     __ping_interval__ = 20
 
-    def __init__(self, parser_factory: "ParserFactory", msg_dispatcher: "Dispatcher"):
+    def __init__(self, factory: "ParserFactory" = parser_factory):
         self.received_pong = False
-        self.parser_factory: "ParserFactory" = parser_factory
-        self.msg_dispatcher = msg_dispatcher
+        self.parser_factory: "ParserFactory" = factory
 
     async def ping(self, ws):
         await asyncio.sleep(self.__ping_interval__)
@@ -56,9 +55,12 @@ class OkexWsDatasource:
                     else:
                         msg = json.loads(msg)
                         channel = msg['arg']['channel']
-                        queue = self.msg_dispatcher.get_queue(channel)
-                        msg = self.parser_factory.get_parser(channel).parse(msg)
-                        await queue.put(msg)
+                        event = self.parser_factory.get_parser(channel).parse(msg)
+                        if isinstance(event, Event):
+                            await default_dispatcher.dispatch(event)
+                        elif isinstance(event, list):
+                            for each in event:
+                                await default_dispatcher.dispatch(each)
                     ping.cancel()
                     ping = asyncio.create_task(self.ping(ws))
                 except Exception as e:

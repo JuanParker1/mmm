@@ -1,22 +1,19 @@
-from asyncio import Queue
+from typing import Dict, Type
 
-from events import ticker_event_source, orderbook_event_source
+from .event import Event
+from .event_source import default_event_source_conf, EventSource
 
 
 class Dispatcher:
-    def __init__(self):
-        self.__register__ = {}
 
-    def add_channel(self, channel_name: str, queue: "Queue"):
-        self.__register__[channel_name] = queue
+    def __init__(self, event_source_conf: Dict[Type["Event"], "EventSource"] = default_event_source_conf):
+        self.event_source_conf = event_source_conf
 
-    def get_queue(self, channel_name: str) -> "Queue":
-        try:
-            return self.__register__[channel_name]
-        except KeyError:
-            raise RuntimeError(f'找不到{channel_name}对应的消息分发器')
+    async def dispatch(self, event: "Event"):
+        event_source = self.event_source_conf.get(type(event), None)
+        if event_source is None:
+            raise RuntimeError(f'{event}找不到对应的事件源')
+        await event_source.put(event)
 
 
-okex_dispatcher: "Dispatcher" = Dispatcher()
-okex_dispatcher.add_channel('trades', ticker_event_source)
-okex_dispatcher.add_channel('books', orderbook_event_source)
+default_dispatcher = Dispatcher()
