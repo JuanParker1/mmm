@@ -8,23 +8,23 @@ from typing import Type, Dict, Callable
 class StrategyMeta(type):
     def __new__(cls, name, bases, kwargs):  # noqa
         event_registry = {}
-        schedule_plan = {}
+        timer_registry = {}
         for method_name, method in kwargs.items():
             e = getattr(method, '__sub_event__', None)
-            if e:
+            if e is not None:
                 event_registry[e] = method_name
-            cron = getattr(method, '__schedule_plan__', None)
-            if cron:
-                schedule_plan[cron] = method_name
+            interval = getattr(method, '__timer_interval__', None)
+            if interval is not None:
+                timer_registry[interval] = method_name
 
         kwargs['__event_registry__'] = event_registry
-        kwargs['__schedule_plan__'] = schedule_plan
+        kwargs['__timer_registry__'] = timer_registry
         return super().__new__(cls, name, bases, kwargs)
 
 
 class Strategy(metaclass=StrategyMeta):
     __event_registry__: Dict[Type[Event], str] = {}
-    __schedule_plan__: Dict[str, str] = {}
+    __timer_registry__: Dict[int, str] = {}
 
 
 class StrategyRunner:
@@ -33,12 +33,16 @@ class StrategyRunner:
         self.event_source_conf = event_source_conf
 
     def create_schedule_task(self):
-        registry = self.strategy.__schedule_plan__
-        for plan, method_name in registry.items():
-
-
-        async def schedule_task():
-            ''''''
+        async def timer(i: int, callback: Callable):
+            callback()
+            while True:
+                await asyncio.sleep(i)
+                callback()
+        registry = self.strategy.__timer_registry__
+        for interval, method_name in registry.items():
+            loop = asyncio.get_event_loop()
+            method = getattr(self.strategy, method_name)
+            loop.create_task(timer(interval, method), name=f'{self.strategy}-timer({interval})-task')
 
     def create_listen_tasks(self):
         async def _create_task(e: "EventSource", c: Callable):

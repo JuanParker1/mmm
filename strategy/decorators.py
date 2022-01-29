@@ -1,17 +1,22 @@
-from croniter import croniter
-from datetime import datetime
 from functools import wraps
 from typing import Type
 from events import Event
 
 
-def schedule(cron: str, base=datetime.now()):
-    # todo 检查plan合法性
+def timer(interval: int):
+    """
+    定时任务
+    :param interval: 时间间隔，单位：秒
+    :return:
+    """
+    if not isinstance(interval, int):
+        raise TypeError(f'参数interval必须是整数')
+
     def new_func(func):
         @wraps(func)
-        def wrap_func():
-            return func()
-        wrap_func.__schedule_plan__ = cron
+        def wrap_func(self):
+            return func(self)
+        wrap_func.__timer_interval__ = interval
         return wrap_func
     return new_func
 

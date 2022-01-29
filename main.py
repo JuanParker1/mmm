@@ -5,7 +5,9 @@ from datasource.okex import OkexWsDatasource
 from strategy.base import StrategyRunner
 from strategy.example.jfd import JfdStrategy
 
-topic1 = json.dumps({
+
+if __name__ == '__main__':
+    topic1 = json.dumps({
         "op": "subscribe",
         "args": [{
             "channel": "trades",
@@ -14,9 +16,7 @@ topic1 = json.dumps({
             "channel": "books",
             "instId": "BTC-USDT"
         }]
-})
-
-
-# OkexWsDatasource().subscribe(topic1)
-StrategyRunner(JfdStrategy()).create_tasks()
-asyncio.get_event_loop().run_forever()
+    })
+    OkexWsDatasource().subscribe(topic1)
+    StrategyRunner(JfdStrategy()).create_tasks()
+    asyncio.get_event_loop().run_forever()
