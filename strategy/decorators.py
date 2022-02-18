@@ -1,3 +1,4 @@
+import inspect
 from functools import wraps
 from typing import Type
 from events import Event

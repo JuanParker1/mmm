@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+from enum import Enum
 
 
 class Event:
@@ -34,6 +35,22 @@ class BarEvent(Event):
 
 class Bar1MEvent(BarEvent):
     """"""
+
+
+class OrderAction(Enum):
+    CREATE_LIMIT_ORDER = 1
+    CREATE_MARKET_ORDER = 2
+    ...
+
+
+class OrderEvent(Event):
+    """订单相关事件"""
+    def __init__(self, action: "OrderAction", params: dict):
+        self.action = action
+        self.params = params
+
+    def __repr__(self):
+        return f"<{self.action.name}|params: {self.params}>"
 
 
 

@@ -13,7 +13,7 @@ class Dispatcher:
         event_source = self.event_source_conf.get(type(event), None)
         if event_source is None:
             raise RuntimeError(f'{event}找不到对应的事件源')
-        await event_source.put(event)
+        event_source.put_nowait(event)
 
 
 default_dispatcher = Dispatcher()

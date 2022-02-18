@@ -1,4 +1,5 @@
 import asyncio
+import inspect
 import logging
 from events.event import Event
 from events.event_source import EventSource, default_event_source_conf
@@ -37,7 +38,10 @@ class StrategyRunner:
             callback()
             while True:
                 await asyncio.sleep(i)
-                callback()
+                if inspect.iscoroutinefunction(callback):
+                    await callback()
+                else:
+                    callback()
         registry = self.strategy.__timer_registry__
         for interval, method_name in registry.items():
             loop = asyncio.get_event_loop()
@@ -48,7 +52,10 @@ class StrategyRunner:
         async def _create_task(e: "EventSource", c: Callable):
             while True:
                 event = await e.get()
-                c(event)
+                if inspect.iscoroutinefunction(c):
+                    await c(event)
+                else:
+                    c(event)
 
         registry = self.strategy.__event_registry__
         for event_type, method_name in registry.items():
