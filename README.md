@@ -7,8 +7,10 @@ import asyncio
 import json
 
 from datasource.okex import OkexWsDatasource
+from order.executor import default_order_executor
 from events import TickerEvent, OrderBookEvent
 from strategy.base import StrategyRunner
+from events.event import OrderEvent, OrderAction
 from strategy.base import Strategy
 from strategy.decorators import sub_event, timer
 
@@ -29,6 +31,8 @@ class JfdStrategy(Strategy):
     def show(self):
         from datetime import datetime
         print(datetime.now())
+        event_source = self.event_source_conf.get(OrderEvent)
+        event_source.put_nowait(OrderEvent(OrderAction.CREATE_MARKET_ORDER, {'usdt': 100}))
 
 if __name__ == '__main__':
     topic1 = json.dumps({
@@ -43,5 +47,6 @@ if __name__ == '__main__':
     })
     OkexWsDatasource().subscribe(topic1)
     StrategyRunner(JfdStrategy()).create_tasks()
+    default_order_executor.execute()
     asyncio.get_event_loop().run_forever()
 ```
