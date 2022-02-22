@@ -29,7 +29,7 @@ class Strategy(metaclass=StrategyMeta):
     __event_registry__: Dict[Type[Event], str] = {}
     __timer_registry__: Dict[int, str] = {}
 
-    def __init__(self, order_manager: OrderManager=default_order_manager):
+    def __init__(self, order_manager: OrderManager = default_order_manager):
         self.order_manager = order_manager
 
 
@@ -47,6 +47,7 @@ class StrategyRunner:
                     await callback()
                 else:
                     callback()
+
         registry = self.strategy.__timer_registry__
         for interval, method_name in registry.items():
             loop = asyncio.get_event_loop()
