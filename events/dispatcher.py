@@ -1,4 +1,5 @@
 import asyncio.queues
+import logging
 from typing import Dict, Type
 
 from .event import Event
@@ -17,7 +18,7 @@ class Dispatcher:
         try:
             event_source.put_nowait(event)
         except asyncio.queues.QueueFull:
-            print(event)
+            logging.error(event)
 
 
 default_dispatcher = Dispatcher()

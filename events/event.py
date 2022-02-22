@@ -2,6 +2,8 @@ from datetime import datetime
 from decimal import Decimal
 from enum import Enum
 
+from types import OrderType
+
 
 class Event:
     """策略事件"""
@@ -35,12 +37,6 @@ class BarEvent(Event):
 
 class Bar1MEvent(BarEvent):
     """"""
-
-
-class OrderType(Enum):
-    LIMIT_ORDER = 1
-    MARKET_ORDER = 2
-    ...
 
 
 class OrderEvent(Event):

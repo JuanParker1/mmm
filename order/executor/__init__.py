@@ -2,7 +2,8 @@ import asyncio
 import logging
 
 from events import default_event_source_conf
-from events.event import OrderEvent, OrderType
+from events.event import OrderEvent
+from types import OrderType
 
 
 class OrderExecutor:
