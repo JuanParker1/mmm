@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 from events import default_event_source_conf
-from events.event import OrderEvent, OrderAction
+from events.event import OrderEvent, OrderType
 
 
 class OrderExecutor:
@@ -10,10 +10,10 @@ class OrderExecutor:
         self.event_source_conf = event_source_conf
 
     def on_order(self, order: "OrderEvent"):
-        if order.action == OrderAction.CREATE_LIMIT_ORDER:
+        if order.action == OrderType.LIMIT_ORDER:
             """创建现价单"""
             print(order)
-        elif order.action == OrderAction.CREATE_MARKET_ORDER:
+        elif order.action == OrderType.MARKET_ORDER:
             """创建市价单"""
             print(order)
         ...

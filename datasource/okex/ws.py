@@ -40,7 +40,7 @@ class OkexWsDatasource:
         loop.create_task(create_task(), name=f'okex-ws-sub-{topic}')
 
     async def _do_subscribe(self, topic: str):
-        async with websockets.connect(self.__uri__) as ws:
+        async with websockets.connect(self.__uri__, ping_interval=None) as ws:
             await ws.send(topic)
             msg = await ws.recv()
             msg = json.loads(msg)

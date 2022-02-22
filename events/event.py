@@ -37,15 +37,15 @@ class Bar1MEvent(BarEvent):
     """"""
 
 
-class OrderAction(Enum):
-    CREATE_LIMIT_ORDER = 1
-    CREATE_MARKET_ORDER = 2
+class OrderType(Enum):
+    LIMIT_ORDER = 1
+    MARKET_ORDER = 2
     ...
 
 
 class OrderEvent(Event):
     """订单相关事件"""
-    def __init__(self, action: "OrderAction", params: dict):
+    def __init__(self, action: "OrderType", params: dict):
         self.action = action
         self.params = params
 

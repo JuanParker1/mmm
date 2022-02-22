@@ -5,6 +5,8 @@ from events.event import Event
 from events.event_source import EventSource, default_event_source_conf
 from typing import Type, Dict, Callable
 
+from order.manager import OrderManager, default_order_manager
+
 
 class StrategyMeta(type):
     def __new__(cls, name, bases, kwargs):  # noqa
@@ -26,6 +28,9 @@ class StrategyMeta(type):
 class Strategy(metaclass=StrategyMeta):
     __event_registry__: Dict[Type[Event], str] = {}
     __timer_registry__: Dict[int, str] = {}
+
+    def __init__(self, order_manager: OrderManager=default_order_manager):
+        self.order_manager = order_manager
 
 
 class StrategyRunner:
