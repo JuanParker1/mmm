@@ -23,7 +23,8 @@ class OkexOrderExecutor:
 
     def create_order(self, *args, **kwargs):
         client_order_id = self.order_id_generator.gen()
-        # todo
+        # todo send order to exchange
+        return client_order_id
 
 
 class BinanceOrderExecutor:
