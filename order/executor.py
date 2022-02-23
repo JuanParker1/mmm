@@ -8,6 +8,10 @@ from events.event_source import EventSourceConfig
 from types import OrderType
 
 
+def create_okex_order():
+    """"""
+
+
 class OrderExecutor:
     def __init__(self, event_source_conf: "EventSourceConfig" = default_event_source_conf):
         self.event_source_conf = event_source_conf
