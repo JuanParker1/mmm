@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from enum import Enum
 
-from types import OrderType
+from types import OrderType, Exchange
 
 
 class Event:
@@ -41,7 +41,8 @@ class Bar1MEvent(BarEvent):
 
 class OrderEvent(Event):
     """订单相关事件"""
-    def __init__(self, order_type: "OrderType", params: dict):
+    def __init__(self, exchange: "Exchange", order_type: "OrderType", params: dict):
+        self.exchange = exchange
         self.order_type = order_type
         self.params = params
 

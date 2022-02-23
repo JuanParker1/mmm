@@ -2,7 +2,7 @@ import asyncio
 import json
 
 from datasource.okex import OkexWsDatasource
-from order.executor import default_order_executor
+from order.order_runner import default_order_runner
 from strategy.base import StrategyRunner
 from strategy.example.jfd import JfdStrategy
 
@@ -20,5 +20,5 @@ if __name__ == '__main__':
     })
     OkexWsDatasource().subscribe(topic1)
     StrategyRunner(JfdStrategy()).create_tasks()
-    default_order_executor.execute()
+    default_order_runner.create_task()
     asyncio.get_event_loop().run_forever()
