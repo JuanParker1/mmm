@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from asyncio import Queue
+from typing import Type
 
 from frozendict import frozendict
 
@@ -45,10 +46,17 @@ class AsyncioQueueOrderEvent(EventSource):
         return rv
 
 
-default_event_source_conf = frozendict({
+class EventSourceConfig:
+    def __init__(self, kwargs):
+        self._config = frozendict(kwargs)
+
+    def get(self, event: Type[Event]):
+        return self._config.get(event, None)
+
+
+default_event_source_conf = EventSourceConfig({
     TickerEvent: AsyncioQueueEventSource(Queue(10000)),
     OrderBookEvent: AsyncioQueueEventSource(Queue(10000)),
     Bar1MEvent: AsyncioQueueEventSource(Queue(10000)),
     OrderEvent: AsyncioQueueOrderEvent(Queue(10000))
 })
-

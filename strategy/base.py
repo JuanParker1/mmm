@@ -2,7 +2,7 @@ import asyncio
 import inspect
 import logging
 from events.event import Event
-from events.event_source import EventSource, default_event_source_conf
+from events.event_source import EventSource, default_event_source_conf, EventSourceConfig
 from typing import Type, Dict, Callable
 
 from order.manager import OrderManager, default_order_manager
@@ -34,7 +34,7 @@ class Strategy(metaclass=StrategyMeta):
 
 
 class StrategyRunner:
-    def __init__(self, strategy: "Strategy", event_source_conf=default_event_source_conf):
+    def __init__(self, strategy: "Strategy", event_source_conf: "EventSourceConfig" = default_event_source_conf):
         self.strategy = strategy
         self.event_source_conf = event_source_conf
 
@@ -65,7 +65,7 @@ class StrategyRunner:
 
         registry = self.strategy.__event_registry__
         for event_type, method_name in registry.items():
-            event_source = self.event_source_conf.get(event_type, None)
+            event_source = self.event_source_conf.get(event_type)
             if event_source is None:
                 logging.error(f'{event_type}没有对应的事件源')
             loop = asyncio.get_event_loop()
