@@ -35,6 +35,9 @@ class OrderRunner:
         order_executor = self.get_order_executor(order_event.exchange)
         loop = asyncio.get_running_loop()
         client_order_id = await loop.run_in_executor(None, order_executor.create_order(order_event))
+        result = await loop.run_in_executor(None, order_executor.query_order(client_order_id, 5))
+        if result is False:
+            logging.error(f"订单{client_order_id}未查询到, 下单失败")
 
     def create_task(self):
 
