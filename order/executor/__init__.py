@@ -1,6 +1,7 @@
 import asyncio
 import logging
 
+from credential import Credential
 from events import default_event_source_conf
 from events.event import OrderEvent
 from types import OrderType
@@ -9,6 +10,7 @@ from types import OrderType
 class OrderExecutor:
     def __init__(self, event_source_conf=default_event_source_conf):
         self.event_source_conf = event_source_conf
+        self.credential = Credential.load_from_env()
 
     def on_order(self, order: "OrderEvent"):
         if order.action == OrderType.LIMIT_ORDER:
