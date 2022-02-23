@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from asyncio import Queue
-from typing import Type
+from typing import Type, Dict
 
 from frozendict import frozendict
 
@@ -47,10 +47,10 @@ class AsyncioQueueOrderEvent(EventSource):
 
 
 class EventSourceConfig:
-    def __init__(self, kwargs):
-        self._config = frozendict(kwargs)
+    def __init__(self, kwargs: Dict[Type[Event], EventSource]):
+        self._config: Dict[Type[Event], EventSource] = frozendict(kwargs)
 
-    def get(self, event: Type[Event]):
+    def get(self, event: Type[Event]) -> EventSource or None:
         return self._config.get(event, None)
 
 

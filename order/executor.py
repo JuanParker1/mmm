@@ -17,10 +17,10 @@ class OrderExecutor:
         self.credential = Credential.load_from_env()
 
     def on_order(self, order: "OrderEvent"):
-        if order.action == OrderType.LIMIT_ORDER:
+        if order.order_type == OrderType.LIMIT_ORDER:
             """创建现价单"""
             print(order)
-        elif order.action == OrderType.MARKET_ORDER:
+        elif order.order_type == OrderType.MARKET_ORDER:
             """创建市价单"""
             print(order)
         ...

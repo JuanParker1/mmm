@@ -41,12 +41,12 @@ class Bar1MEvent(BarEvent):
 
 class OrderEvent(Event):
     """订单相关事件"""
-    def __init__(self, action: "OrderType", params: dict):
-        self.action = action
+    def __init__(self, order_type: "OrderType", params: dict):
+        self.order_type = order_type
         self.params = params
 
     def __repr__(self):
-        return f"<{self.action.name}|params: {self.params}>"
+        return f"<{self.order_type.name}|params: {self.params}>"
 
 
 
