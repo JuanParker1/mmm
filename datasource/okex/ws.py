@@ -33,6 +33,8 @@ class OkexWsDatasource:
             while True:
                 try:
                     await self._do_subscribe(topic)
+                except CollectionError as e:
+                    logging.exception("未收到pong", exc_info=e)
                 except Exception as e:
                     logging.exception(e)
                     logging.info('即将重新连接')
