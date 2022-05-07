@@ -3,7 +3,7 @@ import logging
 from events import default_event_source_conf, EventSource
 from events.event import OrderType, OrderEvent
 from events.event_source import EventSourceConfig
-from types import Exchange
+from mmm_types import Exchange
 
 
 class OrderManager:

@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from enum import Enum
 
-from types import OrderType, Exchange
+from mmm_types import OrderType, Exchange
 
 
 class Event:

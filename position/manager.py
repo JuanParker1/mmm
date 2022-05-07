@@ -2,7 +2,7 @@ import logging
 from typing import List
 
 from position.utils import get_price
-from types import Asset
+from mmm_types import Asset
 
 
 class PositionManager:

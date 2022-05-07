@@ -7,7 +7,7 @@ from events import default_event_source_conf
 from events.event import OrderEvent
 from events.event_source import EventSourceConfig
 from order.utils import OkexOrderIDGenerator
-from types import OrderType
+from mmm_types import OrderType
 from third_party.okex.client import Client as OkexClient
 
 

@@ -6,7 +6,7 @@ from events import default_event_source_conf
 from events.event import OrderEvent
 from events.event_source import EventSourceConfig
 from order.executor import OkexOrderExecutor, OrderExecutor, BinanceOrderExecutor
-from types import Exchange
+from mmm_types import Exchange
 
 
 class OrderRunner:
