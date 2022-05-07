@@ -1,12 +1,16 @@
-# from setuptools import setup, find_packages
-#
-#
-# setup(
-#     name='mmm',
-#     packages=find_packages(),
-#     version='0.0.1',
-#     install_requires=[
-#         "websockets == 10.1",
-#         "frozendict == 2.2.1"
-#     ]
-# )
+from setuptools import setup, find_packages
+
+
+setup(
+    name='mmm',
+    author='ymy',
+    author_email='icheeringsoul@163.com',
+    packages=find_packages(),
+    version='0.0.1',
+    install_requires=[
+        "websockets == 10.1",
+        "frozendict == 2.2.1",
+        "PyYAML==6.0",
+        "requests==2.27.1"
+    ]
+)

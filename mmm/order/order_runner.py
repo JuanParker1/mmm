@@ -1,12 +1,12 @@
 import asyncio
 import logging
 
-from credential import Credential
-from events import default_event_source_conf
-from events.event import OrderEvent
-from events.event_source import EventSourceConfig
-from order.executor import OkexOrderExecutor, OrderExecutor, BinanceOrderExecutor
-from mmm_types import Exchange
+from mmm.credential import Credential
+from mmm.events import default_event_source_conf
+from mmm.events.event import OrderEvent
+from mmm.events import EventSourceConfig
+from mmm.order.executor import OkexOrderExecutor, OrderExecutor, BinanceOrderExecutor
+from mmm.project_types import Exchange
 
 
 class OrderRunner:
@@ -34,10 +34,12 @@ class OrderRunner:
     async def on_order(self, order_event: "OrderEvent"):
         order_executor = self.get_order_executor(order_event.exchange)
         loop = asyncio.get_running_loop()
-        client_order_id = await loop.run_in_executor(None, order_executor.create_order(order_event))
-        result = await loop.run_in_executor(None, order_executor.query_order(client_order_id, 5))
+        client_order_id = await loop.run_in_executor(None, lambda: order_executor.create_order(order_event))
+        result = await loop.run_in_executor(None, lambda: order_executor.query_order(client_order_id, 5))
         if result is False:
             logging.error(f"订单{client_order_id}未查询到, 下单失败")
+        else:
+            logging.info(f"订单{client_order_id}执行成功")
 
     def create_task(self):
 

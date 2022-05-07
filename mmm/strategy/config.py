@@ -3,7 +3,7 @@ from decimal import Decimal
 import yaml
 
 from typing import List
-from mmm_types import Asset
+from mmm.project_types import Asset
 
 
 class StrategyConfig:

@@ -1,14 +1,7 @@
-import asyncio
-import logging
-
 from abc import ABC, abstractmethod
-from credential import Credential
-from events import default_event_source_conf
-from events.event import OrderEvent
-from events.event_source import EventSourceConfig
-from order.utils import OkexOrderIDGenerator
-from mmm_types import OrderType
-from third_party.okex.client import Client as OkexClient
+from mmm.credential import Credential
+from mmm.order.utils import OkexOrderIDGenerator
+from mmm.third_party.okex.client import Client as OkexClient
 
 
 class OrderExecutor(ABC):
@@ -37,7 +30,8 @@ class OkexOrderExecutor(OrderExecutor):
         return client_order_id
 
     def query_order(self, client_order_id, timeout):
-        pass
+        # todo query order
+        return client_order_id
 
 
 class BinanceOrderExecutor:

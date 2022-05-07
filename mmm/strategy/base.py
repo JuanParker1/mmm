@@ -1,11 +1,11 @@
 import asyncio
 import inspect
 import logging
-from events.event import Event
-from events.event_source import EventSource, default_event_source_conf, EventSourceConfig
+from mmm.events.event import Event
+from mmm.events import EventSource, default_event_source_conf, EventSourceConfig
 from typing import Type, Dict, Callable
 
-from order.manager import OrderManager, default_order_manager
+from mmm.order.manager import OrderManager, default_order_manager
 
 
 class StrategyMeta(type):

@@ -1,9 +1,9 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Dict
+from typing import Dict, List
 
-from events import TickerEvent, OrderBookEvent
-from events.parser import Parser
+from mmm.events import TickerEvent, OrderBookEvent
+from mmm.events.parser import Parser
 
 
 class ParserFactory:
@@ -22,7 +22,7 @@ class ParserFactory:
 
 class TickerParser(Parser):
 
-    def parse(self, data: Dict) -> "TickerEvent":
+    def parse(self, data: Dict) -> "TickerEvent" or List["TickerEvent"]:
         result = []
         data = data['data']
         for each in data:

@@ -1,7 +1,6 @@
-import inspect
 from functools import wraps
 from typing import Type
-from events import Event
+from mmm.events import Event
 
 
 def timer(interval: int):

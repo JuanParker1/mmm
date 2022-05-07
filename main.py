@@ -1,13 +1,39 @@
 import asyncio
 import json
+import logging
 
-from datasource.okex import OkexWsDatasource
-from order.order_runner import default_order_runner
-from strategy.base import StrategyRunner
-from strategy.example.jfd import JfdStrategy
+from mmm.datasource import OkexWsDatasource
+from mmm.order.order_runner import default_order_runner
+from mmm.strategy.base import StrategyRunner
+from mmm.events import TickerEvent, OrderBookEvent
+from mmm.project_types import Exchange
+from mmm.strategy.base import Strategy
+from mmm.strategy.decorators import sub_event, timer
+
+
+class JfdStrategy(Strategy):
+
+    @sub_event(TickerEvent)
+    def on_ticker(self, ticker: TickerEvent):
+        """"""
+        print(ticker)
+        print('.'*20)
+
+    @sub_event(OrderBookEvent)
+    def on_orderbook(self, order_book: OrderBookEvent):
+        """"""
+        print(order_book)
+        print('-'*20)
+
+    @timer(3)
+    def schedule(self):
+        from datetime import datetime
+        print(datetime.now())
+        self.order_manager.create_market_order(Exchange.OKEX, usdt=100)
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     topic1 = json.dumps({
         "op": "subscribe",
         "args": [{

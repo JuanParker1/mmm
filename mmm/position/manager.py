@@ -1,8 +1,8 @@
 import logging
 from typing import List
 
-from position.utils import get_price
-from mmm_types import Asset
+from mmm.position.utils import get_price
+from mmm.project_types import Asset
 
 
 class PositionManager:

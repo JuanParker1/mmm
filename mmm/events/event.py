@@ -1,8 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
-from enum import Enum
 
-from mmm_types import OrderType, Exchange
+from mmm.project_types import OrderType, Exchange
 
 
 class Event:

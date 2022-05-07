@@ -1,9 +1,9 @@
 import logging
 
-from events import default_event_source_conf, EventSource
-from events.event import OrderType, OrderEvent
-from events.event_source import EventSourceConfig
-from mmm_types import Exchange
+from mmm.events import default_event_source_conf, EventSource
+from mmm.events.event import OrderType, OrderEvent
+from mmm.events import EventSourceConfig
+from mmm.project_types import Exchange
 
 
 class OrderManager:
@@ -14,7 +14,7 @@ class OrderManager:
 
     def _create_order(self, order_event: "OrderEvent"):
         logging.info(f'下单：订单类型{order_event.order_type}, 参数: {order_event.params}')
-        self.event_source.put_nowait(OrderEvent)
+        self.event_source.put_nowait(order_event)
 
     def create_limit_order(self, exchange: "Exchange", **kwargs):
         order_event = OrderEvent(exchange, OrderType.LIMIT_ORDER, kwargs)
