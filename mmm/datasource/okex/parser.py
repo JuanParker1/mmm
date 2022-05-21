@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Dict, List
 
-from mmm.events import TickerEvent, OrderBookEvent
+from mmm.events import TradesEvent, OrderBookEvent
 from mmm.events.parser import Parser
 
 
@@ -20,13 +20,13 @@ class ParserFactory:
         self.__register__[channel] = parser
 
 
-class TickerParser(Parser):
+class TradesParser(Parser):
 
-    def parse(self, data: Dict) -> "TickerEvent" or List["TickerEvent"]:
+    def parse(self, data: Dict) -> "TradesEvent" or List["TradesEvent"]:
         result = []
         data = data['data']
         for each in data:
-            ticker = TickerEvent(each['instId'], Decimal(each['px']), Decimal(each['sz']), each['side'],
+            ticker = TradesEvent(each['instId'], Decimal(each['px']), Decimal(each['sz']), each['side'],
                                  datetime.fromtimestamp(int(each['ts'])/1000))
             result.append(ticker)
         return result
@@ -39,7 +39,7 @@ class OrderbookParser(Parser):
 
 
 parser_factory = ParserFactory()
-parser_factory.add_parser('trades', TickerParser())
+parser_factory.add_parser('trades', TradesParser())
 parser_factory.add_parser('books', OrderbookParser())
 
 

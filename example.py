@@ -5,7 +5,7 @@ import logging
 from mmm.datasource import OkexWsDatasource
 from mmm.order.order_runner import default_order_runner
 from mmm.strategy.base import StrategyRunner
-from mmm.events import TickerEvent, OrderBookEvent
+from mmm.events import TradesEvent, OrderBookEvent
 from mmm.project_types import Exchange
 from mmm.strategy.base import Strategy
 from mmm.strategy.decorators import sub_event, timer
@@ -13,8 +13,8 @@ from mmm.strategy.decorators import sub_event, timer
 
 class JfdStrategy(Strategy):
 
-    @sub_event(TickerEvent)
-    def on_ticker(self, ticker: TickerEvent):
+    @sub_event(TradesEvent)
+    def on_ticker(self, ticker: TradesEvent):
         """"""
         print(ticker)
         print('.'*20)

@@ -8,7 +8,7 @@ class Event:
     """策略事件"""
 
 
-class TickerEvent(Event):
+class TradesEvent(Event):
 
     def __init__(self, inst_id: str, price: Decimal, volume: Decimal, side: str, ts: datetime):
         self.inst_id: str = inst_id
