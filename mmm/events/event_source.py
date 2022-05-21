@@ -32,20 +32,6 @@ class AsyncioQueueEventSource(EventSource):
         return rv
 
 
-class AsyncioQueueOrderEvent(EventSource):
-
-    def __init__(self, queue: Queue):
-        self.queue = queue
-
-    def put_nowait(self, event: "Event"):
-        self.queue.put_nowait(event)
-
-    async def get(self) -> "Event":
-        rv = await self.queue.get()
-        self.queue.task_done()
-        return rv
-
-
 class EventSourceConfig:
     def __init__(self, kwargs: Dict[Type[Event], EventSource]):
         self._config: Dict[Type[Event], EventSource] = frozendict(kwargs)
@@ -54,9 +40,11 @@ class EventSourceConfig:
         return self._config.get(event, None)
 
 
+default_queue_length = 10000
 default_event_source_conf = EventSourceConfig({
-    TradesEvent: AsyncioQueueEventSource(Queue(10000)),
-    OrderBookEvent: AsyncioQueueEventSource(Queue(10000)),
-    Bar1MEvent: AsyncioQueueEventSource(Queue(10000)),
-    OrderEvent: AsyncioQueueOrderEvent(Queue(10000))
+    Event: AsyncioQueueEventSource(Queue(default_queue_length)),
+    TradesEvent: AsyncioQueueEventSource(Queue(default_queue_length)),
+    OrderBookEvent: AsyncioQueueEventSource(Queue(default_queue_length)),
+    Bar1MEvent: AsyncioQueueEventSource(Queue(default_queue_length)),
+    OrderEvent: AsyncioQueueEventSource(Queue(default_queue_length))
 })

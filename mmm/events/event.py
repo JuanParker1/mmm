@@ -9,6 +9,13 @@ class Event:
     def __init__(self, data):
         self.raw_data = data
 
+    @property
+    def raw_data(self):
+        return self.raw_data
+
+    def __repr__(self):
+        return str(self.raw_data)
+
 
 class TradesEvent(Event):
 
