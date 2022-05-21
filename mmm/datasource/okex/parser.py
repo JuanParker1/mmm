@@ -33,8 +33,8 @@ class DefaultParser(Parser):
 
 
 parser_factory = ParserFactory()
-parser_factory.add_parser('trades', TradesParser())
-parser_factory.add_parser('books', OrderbookParser())
+parser_factory.register('trades', TradesParser())
+parser_factory.register('books', OrderbookParser())
 
 
 

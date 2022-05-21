@@ -57,7 +57,7 @@ class OkexWsDatasource:
                     else:
                         msg = json.loads(msg)
                         channel = msg['arg']['channel']
-                        event = self.parser_factory.get_parser(channel).parse(msg)
+                        event = self.parser_factory.get(channel).parse(msg)
                         if isinstance(event, Event):
                             await default_dispatcher.dispatch(event)
                         elif isinstance(event, list):

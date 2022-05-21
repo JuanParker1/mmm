@@ -1,4 +1,3 @@
-import logging
 from typing import Dict, List
 
 from mmm.events import Parser, Event
@@ -12,17 +11,12 @@ class DefaultParser(Parser):
 
 class ParserFactory:
     def __init__(self):
-        self.__register__ = {
-            'default': DefaultParser()
-        }
+        self.default_parser = DefaultParser()
+        self.__registry__ = {}
 
-    def get_parser(self, channel: str) -> "Parser":
-        try:
-            return self.__register__[channel]
-        except KeyError:
-            logging.info(f'找不到{channel}对应的解析器, 返回默认解析器')
-            return self.__register__['default']
+    def get(self, channel: str) -> "Parser":
+        return self.__registry__.get(channel, self.default_parser)
 
-    def add_parser(self, channel: str, parser: "Parser"):
-        self.__register__[channel] = parser
+    def register(self, channel: str, parser: "Parser"):
+        self.__registry__[channel] = parser
 
