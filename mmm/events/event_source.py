@@ -4,7 +4,7 @@ from typing import Type, Dict
 
 from frozendict import frozendict
 
-from .event import TradesEvent, OrderBookEvent, Bar1MEvent, Event, OrderEvent
+from .event import TradesEvent, OrderBookEvent, Event, OrderEvent, BarEvent
 
 
 class EventSource(ABC):
@@ -45,6 +45,6 @@ default_event_source_conf = EventSourceConfig({
     Event: AsyncioQueueEventSource(Queue(default_queue_length)),
     TradesEvent: AsyncioQueueEventSource(Queue(default_queue_length)),
     OrderBookEvent: AsyncioQueueEventSource(Queue(default_queue_length)),
-    Bar1MEvent: AsyncioQueueEventSource(Queue(default_queue_length)),
+    BarEvent: AsyncioQueueEventSource(Queue(default_queue_length)),
     OrderEvent: AsyncioQueueEventSource(Queue(default_queue_length))
 })

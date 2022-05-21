@@ -56,13 +56,18 @@ class OkexWsDatasource:
                         self.received_pong = True
                     else:
                         msg = json.loads(msg)
-                        channel = msg['arg']['channel']
-                        event = self.parser_factory.get(channel).parse(msg)
-                        if isinstance(event, Event):
-                            await default_dispatcher.dispatch(event)
-                        elif isinstance(event, list):
-                            for each in event:
-                                await default_dispatcher.dispatch(each)
+                        if msg.get('event') == 'subscribe':
+                            logging.info(f'订阅{topic}成功')
+                        elif msg.get('event') == 'error':
+                            logging.error(f'订阅{topic}失败, {msg}')
+                        else:
+                            channel = msg['arg']['channel']
+                            event = self.parser_factory.get(channel).parse(msg)
+                            if isinstance(event, Event):
+                                await default_dispatcher.dispatch(event)
+                            elif isinstance(event, list):
+                                for each in event:
+                                    await default_dispatcher.dispatch(each)
                     ping.cancel()
                     ping = asyncio.create_task(self.ping(ws))
                 except Exception as e:
