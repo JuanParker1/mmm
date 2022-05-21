@@ -7,14 +7,14 @@ from mmm.project_types import OrderType, Exchange
 
 class Event:
     def __init__(self, data):
-        self.raw_data = data
+        self._raw_data = data
 
     @property
     def raw_data(self):
-        return self.raw_data
+        return self._raw_data
 
     def __repr__(self):
-        return str(self.raw_data)
+        return str(self._raw_data)
 
 
 class TradesEvent(Event):
